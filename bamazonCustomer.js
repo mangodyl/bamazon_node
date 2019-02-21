@@ -12,7 +12,6 @@ var connection = mysql.createConnection({
 connection.connect((err) => {
     if (err) throw err;
     displayItems();
-    setTimeout(buyItems(), 8000);
 });
 
 const displayItems = () => {
@@ -28,6 +27,7 @@ const displayItems = () => {
             Stock: ${item.stock_quantity} units
             --------------------`)
         };
+        buyItems();
     });
 };
 
@@ -42,11 +42,23 @@ const buyItems = () => {
                 name: "enterID",
                 type: "input",
                 validate: function(value) {
-                    let pass = value.match("\d{5}");
+                    let pass = value.match("[0-9]{1,5}");
                     if(pass) return true;
                     else return "Please enter a valid ID";
                 },
                 message: "Enter the ID of the product you wish to purchase"
             }
         ])
-}
+        .then(answer => {
+            console.log(answer.askBuy);
+            console.log(answer.enterID);
+            if(answer.askBuy){
+                
+            } else {
+                console.log(`In that case... 
+                I DEMAND THAT YOU LEAVE MY SITE IMMEDIATELY!
+                
+                PRESS 'CTRL + C' TO LEAVE IN SHAME`);
+            };
+        })
+};
