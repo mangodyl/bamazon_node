@@ -50,7 +50,7 @@ const buyItems = () => {
                             name: "enterID",
                             type: "input",
                             validate: function(value) {
-                                let pass = value.match("[0-9]{1,5}");
+                                let pass = value.match("^\\d{1,2}$");
                                 if(pass) return true;
                                 else return "Please enter a valid ID";
                             },
@@ -60,10 +60,8 @@ const buyItems = () => {
                             name: "enterAmount",
                             type: "input",
                             validate: function(value) {
-                                let pass = value.match("[0-9]{1,3}");
-                                console.log(value);
-                                console.log(itemNum);
-                                if(pass && value <= itemNum) return true;
+                                let pass = value.match("^\\d{1,4}$");
+                                if(pass) return true;
                                 else return "Please enter a valid amount between 1 and 9999";
                             },
                             message: "Please enter the amount you wish to purchase"
@@ -74,18 +72,16 @@ const buyItems = () => {
                         connection.query(query, answer.enterID, (err, res) => {
                             if (err) throw err;
                             let stock = parseInt(res[0].stock_quantity);
-                            if (res[0].stock_quantity == undefined) {
-                                console.log("Please enter a valid item ID. Check the list above if unsure")
-                            } else if (orderAmount >= 0 && orderAmount <= stock) {
-                                console.log(`Order completed! Your ${res[0].product_name} will be with you soon!`)
+                            if (orderAmount >= 0 && orderAmount <= stock) {
+                                console.log(`Order completed! Your ${res[0].product_name} will be with you soon!`);
                                 let newStock = stock - orderAmount;
-                                let query = `UPDATE products SET stock_quantity = ? WHERE item_id = ?`
+                                let query = `UPDATE products SET stock_quantity = ? WHERE item_id = ?`;
                                 connection.query(query, [newStock, res[0].item_id], (err, res) => {
                                     if (err) throw err;
                                     console.log(res);
                                 })
                             } else {
-                                console.log("We can't complete this order. Please check our stocks and try again")
+                                console.log("We can't complete this order. Please check our stocks and try again");
                                 buyItems();
                             };
                         });
