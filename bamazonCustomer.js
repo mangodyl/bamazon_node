@@ -51,7 +51,13 @@ const buyItems = () => {
                             type: "input",
                             validate: function(value) {
                                 let pass = value.match("^\\d{1,2}$");
-                                if(pass) return true;
+                                if(pass) {
+                                    if (value <= itemNum) {
+                                        return true;
+                                    } else {
+                                        return "This ID is not matched to a product."
+                                    };
+                                }
                                 else return "Please enter a valid ID";
                             },
                             message: "Enter the ID of the product you wish to purchase"
