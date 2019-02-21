@@ -38,22 +38,54 @@ const buyItems = () => {
                 name: "askBuy",
                 type: "confirm",
                 message: "Have you decided what you'd like to buy?"
-            }, {
-                name: "enterID",
-                type: "input",
-                validate: function(value) {
-                    let pass = value.match("[0-9]{1,5}");
-                    if(pass) return true;
-                    else return "Please enter a valid ID";
-                },
-                message: "Enter the ID of the product you wish to purchase"
             }
         ])
         .then(answer => {
-            console.log(answer.askBuy);
-            console.log(answer.enterID);
             if(answer.askBuy){
-                
+                inquirer
+                    .prompt([
+                        {
+                            name: "enterID",
+                            type: "input",
+                            validate: function(value) {
+                                let pass = value.match("[0-9]{1,5}");
+                                if(pass) return true;
+                                else return "Please enter a valid ID";
+                            },
+                            message: "Enter the ID of the product you wish to purchase"
+                        },
+                        {
+                            name: "enterAmount",
+                            type: "input",
+                            validate: function(value) {
+                                let pass = value.match("[0-9]{1,3}");
+                                if(pass) return true;
+                                else return "Please enter a valid amount between 1 and 9999";
+                            },
+                            message: "Please enter the amount you wish to purchase"
+                        }
+                    ]).then(answer => {
+                        let query = "SELECT * FROM products WHERE item_id =?";
+                        var orderAmount = parseInt(answer.enterAmount);
+                        connection.query(query, answer.enterID, (err, res) => {
+                            if (err) throw err;
+                            let stock = parseInt(res[0].stock_quantity);
+                            if (res[0].stock_quantity == undefined) {
+                                console.log("Please enter a valid item ID. Check the list above if unsure")
+                            } else if (orderAmount >= 0 && orderAmount <= stock) {
+                                console.log(`Order completed! Your ${res[0].product_name} will be with you soon!`)
+                                let newStock = stock - orderAmount;
+                                let query = `UPDATE products SET stock_quantity = ? WHERE item_id = ?`
+                                connection.query(query, [newStock, res[0].item_id], (err, res) => {
+                                    if (err) throw err;
+                                    console.log(res);
+                                })
+                            } else {
+                                console.log("We can't complete this order. Please check our stocks and try again")
+                                buyItems();
+                            };
+                        });
+                    });
             } else {
                 console.log(`In that case... 
                 I DEMAND THAT YOU LEAVE MY SITE IMMEDIATELY!
