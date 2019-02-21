@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+let itemNum;
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -18,7 +19,8 @@ const displayItems = () => {
     var query = "SELECT * FROM products";
     connection.query(query, function(err, res) {
         let item;
-        for (let i = 0; i < res.length; i++) {
+        itemNum = res.length;
+        for (let i = 0; i < itemNum; i++) {
             item = res[i];
             console.log(`Item ID: ${item.item_id}
             >> ${item.product_name}
@@ -59,7 +61,9 @@ const buyItems = () => {
                             type: "input",
                             validate: function(value) {
                                 let pass = value.match("[0-9]{1,3}");
-                                if(pass) return true;
+                                console.log(value);
+                                console.log(itemNum);
+                                if(pass && value <= itemNum) return true;
                                 else return "Please enter a valid amount between 1 and 9999";
                             },
                             message: "Please enter the amount you wish to purchase"
