@@ -79,12 +79,13 @@ const buyItems = () => {
                             if (err) throw err;
                             let stock = parseInt(res[0].stock_quantity);
                             if (orderAmount >= 0 && orderAmount <= stock) {
-                                console.log(`Order completed! Your ${res[0].product_name} will be with you soon!`);
+                                console.log(`Order completed! Your '${res[0].product_name}' will be with you soon!`);
                                 let newStock = stock - orderAmount;
                                 let query = `UPDATE products SET stock_quantity = ? WHERE item_id = ?`;
                                 connection.query(query, [newStock, res[0].item_id], (err, res) => {
                                     if (err) throw err;
-                                    console.log(res);
+                                    console.log(`\nStock levels have been changed to ${newStock}! Why don't you order something else too? Treat yourself!`);
+                                    displayItems();
                                 })
                             } else {
                                 console.log("We can't complete this order. Please check our stocks and try again");
