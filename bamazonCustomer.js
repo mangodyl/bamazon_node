@@ -84,8 +84,7 @@ const buyItems = () => {
                                 let query = `UPDATE products SET stock_quantity = ? WHERE item_id = ?`;
                                 connection.query(query, [newStock, res[0].item_id], (err, res) => {
                                     if (err) throw err;
-                                    console.log(`\nStock levels have been changed to ${newStock}! Why don't you order something else too? Treat yourself!`);
-                                    displayItems();
+                                    console.log(`\nStock levels have been changed to ${newStock} - looks like they're going fast! \nCome again soon! Use 'ctrl + c' to leave.`);
                                 })
                             } else {
                                 console.log("We can't complete this order. Please check our stocks and try again");
