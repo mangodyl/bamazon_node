@@ -14,10 +14,10 @@ __Note: To run this app you must have node installed.__
 ***
 
 Here's a handy video guide showing you how it should work:
-https://drive.google.com/file/d/1OTDo59MBrM4JdgW1FTKZ7j9JPvCuaSxK/view
+> https://drive.google.com/file/d/1OTDo59MBrM4JdgW1FTKZ7j9JPvCuaSxK/view
 
 And here's what it looks like when you try breaking things:
->video here
+> https://drive.google.com/file/d/170f9GAkPjf8yFMLmuXnBmghgvVzJ4M0_/view
 
 ## Happy buying! :v: ##
 
