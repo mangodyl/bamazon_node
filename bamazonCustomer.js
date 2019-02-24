@@ -78,8 +78,11 @@ const buyItems = () => {
                         connection.query(query, answer.enterID, (err, res) => {
                             if (err) throw err;
                             let stock = parseInt(res[0].stock_quantity);
+                            let totalCost = (parseFloat(res[0].price) * orderAmount).toFixed(2);
                             if (orderAmount >= 0 && orderAmount <= stock) {
-                                console.log(`Order completed! Your '${res[0].product_name}' will be with you soon!`);
+                                console.log(`Order completed!
+                                Your '${res[0].product_name}' will be with you soon!
+                                Total cost is $${totalCost}`);
                                 let newStock = stock - orderAmount;
                                 let query = `UPDATE products SET stock_quantity = ? WHERE item_id = ?`;
                                 connection.query(query, [newStock, res[0].item_id], (err, res) => {
